@@ -45,3 +45,23 @@ input, textarea{
     border-radius:8px;
     border:1px solid #ccc;
 }
+#profile{
+    margin-top:20px;
+}
+
+#profile .card{
+    background:#f8f9ff;
+    border:2px solid #4F46E5;
+    border-radius:12px;
+    padding:20px;
+    margin-top:20px;
+}
+
+#profile h2{
+    color:#4F46E5;
+}
+
+#profile p{
+    margin:8px 0;
+    font-size:16px;
+}

@@ -1,25 +1,28 @@
-// This function runs when the button is clicked
 function startApp(){
 
-    // Get the values from the form
-    const name = document.getElementById("name").value;
-    const studentClass = document.getElementById("class").value;
-    const hobbies = document.getElementById("hobbies").value;
-    const bio = document.getElementById("bio").value;
+    // Get what the student typed
+    let name = document.getElementById("name").value;
+    let studentClass = document.getElementById("studentClass").value;
+    let hobbies = document.getElementById("hobbies").value;
+    let bio = document.getElementById("bio").value;
 
-    // Check that the user filled in their name
-    if(name===""){
+    // Make sure they entered a name
+    if(name==""){
         alert("Please enter your name!");
         return;
     }
 
-    // Display the profile
+    // Show the student's profile
     document.getElementById("profile").innerHTML = `
-        <div class="card">
-            <h2>${name}</h2>
-            <p><strong>Class:</strong> ${studentClass}</p>
-            <p><strong>Hobbies:</strong> ${hobbies}</p>
-            <p><strong>About Me:</strong> ${bio}</p>
-        </div>
+        <h2>Your Profile</h2>
+
+        <p><b>Name:</b> ${name}</p>
+
+        <p><b>Class:</b> ${studentClass}</p>
+
+        <p><b>Hobbies:</b> ${hobbies}</p>
+
+        <p><b>About Me:</b> ${bio}</p>
     `;
+
 }

@@ -1,29 +1,34 @@
-function startApp() {
+function createProfile() {
 
-    // Get what the user typed
-    let name = document.getElementById("name").value;
-    let studentClass = document.getElementById("studentClass").value;
-    let hobbies = document.getElementById("hobbies").value;
-    let bio = document.getElementById("bio").value;
+    // Get the values from the form
+    const name = document.getElementById("name").value;
+    const studentClass = document.getElementById("studentClass").value;
+    const hobbies = document.getElementById("hobbies").value;
+    const interests = document.getElementById("interests").value;
+    const bio = document.getElementById("bio").value;
 
-    // Make sure the name isn't empty
-    if (name === "") {
+    // Check if the name is empty
+    if (name.trim() === "") {
         alert("Please enter your name!");
         return;
     }
 
-    // Show the profile below the button
+    // Show the profile
     document.getElementById("profile").innerHTML = `
-        <div class="card">
-            <h2>👤 Your Profile</h2>
+        <div class="profile-card">
 
-            <p><strong>Name:</strong> ${name}</p>
+            <h2>👤 ${name}</h2>
 
-            <p><strong>Class:</strong> ${studentClass}</p>
+            <p><strong>🏫 Class:</strong> ${studentClass}</p>
 
-            <p><strong>Hobbies:</strong> ${hobbies}</p>
+            <p><strong>🎯 Interests:</strong> ${interests}</p>
 
-            <p><strong>About Me:</strong> ${bio}</p>
+            <p><strong>🎮 Hobbies:</strong> ${hobbies}</p>
+
+            <p><strong>📝 About Me:</strong></p>
+
+            <p>${bio}</p>
+
         </div>
     `;
 }

@@ -1,17 +1,65 @@
-/* SparkFinder Styles */
+/* SparkFinder */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
 
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#eef4ff;
+    background:#eef2ff;
 }
 
-header{
-    background:#4F46E5;
+/* Navigation */
+
+nav{
+    background:#5B4BDB;
     color:white;
-    text-align:center;
-    padding:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 30px;
 }
+
+nav h1{
+    font-size:28px;
+}
+
+.nav-links{
+    display:flex;
+    gap:20px;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.nav-links a:hover{
+    text-decoration:underline;
+}
+
+/* Hero */
+
+.hero{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.hero h2{
+    font-size:40px;
+    color:#5B4BDB;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:18px;
+    color:#555;
+}
+
+/* Main container */
 
 .container{
     width:90%;
@@ -19,62 +67,117 @@ header{
     margin:30px auto;
 }
 
+/* Cards */
+
 .card{
     background:white;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom:25px;
 }
 
-h2{
-    color:#4F46E5;
+.card h2{
+    color:#5B4BDB;
+    margin-bottom:20px;
 }
+
+/* Inputs */
 
 input,
 textarea{
+
     width:100%;
-    padding:12px;
+    padding:14px;
     margin:10px 0;
-    border:1px solid #ccc;
-    border-radius:8px;
+
+    border:2px solid #ddd;
+    border-radius:10px;
+
     font-size:16px;
-    box-sizing:border-box;
 }
 
 textarea{
-    height:100px;
-    resize:vertical;
+    height:120px;
+    resize:none;
 }
 
+/* Button */
+
 button{
+
     width:100%;
-    padding:12px;
-    background:#4F46E5;
+
+    padding:15px;
+
+    background:#5B4BDB;
+
     color:white;
+
     border:none;
-    border-radius:8px;
-    font-size:16px;
+
+    border-radius:10px;
+
+    font-size:18px;
+
     cursor:pointer;
-    margin-top:10px;
+
+    transition:0.3s;
 }
 
 button:hover{
-    background:#3730A3;
+
+    background:#4338CA;
 }
+
+/* Profile */
 
 #profile{
-    margin-top:25px;
+
+    margin-top:20px;
 }
 
-#profile .card{
-    background:#f8f9ff;
-    border:2px solid #4F46E5;
+.profile-card{
+
+    background:white;
+
+    border-left:8px solid #5B4BDB;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
-#profile h2{
-    margin-top:0;
+.profile-card h2{
+
+    color:#5B4BDB;
+
+    margin-bottom:15px;
 }
 
-#profile p{
+.profile-card p{
+
     margin:8px 0;
+}
+
+/* Mobile */
+
+@media(max-width:700px){
+
+nav{
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
+.hero h2{
+
+font-size:32px;
+
+}
+
 }

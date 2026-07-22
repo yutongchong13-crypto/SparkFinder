@@ -1,34 +1,61 @@
+// Store all profiles
+let profiles = [];
+
 function createProfile() {
 
-    // Get the values from the form
     const name = document.getElementById("name").value;
     const studentClass = document.getElementById("studentClass").value;
     const hobbies = document.getElementById("hobbies").value;
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
-    // Check if the name is empty
-    if (name.trim() === "") {
+    if(name.trim()==""){
         alert("Please enter your name!");
         return;
     }
 
-    // Show the profile
-    document.getElementById("profile").innerHTML = `
+    // Add profile to the list
+    profiles.push({
+        name,
+        studentClass,
+        hobbies,
+        interests,
+        bio
+    });
+
+    displayProfiles();
+
+    // Clear the form
+    document.getElementById("name").value="";
+    document.getElementById("studentClass").value="";
+    document.getElementById("hobbies").value="";
+    document.getElementById("interests").value="";
+    document.getElementById("bio").value="";
+}
+
+function displayProfiles(){
+
+    let html="";
+
+    profiles.forEach(profile=>{
+
+        html+=`
         <div class="profile-card">
 
-            <h2>👤 ${name}</h2>
+            <h2>👤 ${profile.name}</h2>
 
-            <p><strong>🏫 Class:</strong> ${studentClass}</p>
+            <p><strong>🏫 Class:</strong> ${profile.studentClass}</p>
 
-            <p><strong>🎯 Interests:</strong> ${interests}</p>
+            <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
 
-            <p><strong>🎮 Hobbies:</strong> ${hobbies}</p>
+            <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
 
-            <p><strong>📝 About Me:</strong></p>
-
-            <p>${bio}</p>
+            <p>${profile.bio}</p>
 
         </div>
-    `;
+        `;
+    });
+
+    document.getElementById("profile").innerHTML=html;
+
 }

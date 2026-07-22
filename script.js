@@ -1,28 +1,27 @@
-function startApp(){
+function startApp() {
 
-    // Get what the student typed
+    // Get what the user typed
     let name = document.getElementById("name").value;
     let studentClass = document.getElementById("studentClass").value;
     let hobbies = document.getElementById("hobbies").value;
     let bio = document.getElementById("bio").value;
 
-    // Make sure they entered a name
-    if(name==""){
+    // Make sure the name isn't empty
+    if (name === "") {
         alert("Please enter your name!");
         return;
     }
 
-    // Show the student's profile
+    // Show the profile below the button
     document.getElementById("profile").innerHTML = `
         <h2>Your Profile</h2>
 
-        <p><b>Name:</b> ${name}</p>
+        <p><strong>Name:</strong> ${name}</p>
 
-        <p><b>Class:</b> ${studentClass}</p>
+        <p><strong>Class:</strong> ${studentClass}</p>
 
-        <p><b>Hobbies:</b> ${hobbies}</p>
+        <p><strong>Hobbies:</strong> ${hobbies}</p>
 
-        <p><b>About Me:</b> ${bio}</p>
+        <p><strong>About Me:</strong> ${bio}</p>
     `;
-
 }

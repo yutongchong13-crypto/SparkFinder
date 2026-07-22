@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SparkFinder</title>
 
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<header>
+<nav>
+    <h1>✨ SparkFinder</h1>
 
-<h1>✨ SparkFinder</h1>
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Friends</a>
+        <a href="#">CCAs</a>
+        <a href="#">Chat</a>
+    </div>
+</nav>
 
-<p>Find new friends with similar hobbies and interests!</p>
+<section class="hero">
 
-</header>
+<h2>Find Your Spark ✨</h2>
+
+<p>
+Meet classmates with similar hobbies and interests.
+</p>
+
+</section>
 
 <div class="container">
 
@@ -29,22 +39,23 @@
 
 <h2>Create Your Profile</h2>
 
-<input id="name" placeholder="Your Name">
+<input id="name" placeholder="Full Name">
 
 <input id="studentClass" placeholder="Class (e.g. 1A)">
 
 <input id="hobbies" placeholder="Hobbies">
 
+<input id="interests" placeholder="Interests">
+
 <textarea id="bio" placeholder="Tell everyone about yourself"></textarea>
 
-<button onclick="startApp()">
+<button onclick="createProfile()">
 Create Profile
 </button>
 
-<!-- Your profile will appear here -->
-<div id="profile"></div>
-
 </div>
+
+<div id="profile"></div>
 
 </div>
 

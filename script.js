@@ -14,27 +14,16 @@ function startApp() {
 
     // Show the profile below the button
     document.getElementById("profile").innerHTML = `
-<div class="card">
+        <div class="card">
+            <h2>👤 Your Profile</h2>
 
-<h2>👤 Your Profile</h2>
+            <p><strong>Name:</strong> ${name}</p>
 
-<p><strong>Name:</strong> ${name}</p>
+            <p><strong>Class:</strong> ${studentClass}</p>
 
-<p><strong>Class:</strong> ${studentClass}</p>
+            <p><strong>Hobbies:</strong> ${hobbies}</p>
 
-<p><strong>Hobbies:</strong> ${hobbies}</p>
-
-<p><strong>About Me:</strong> ${bio}</p>
-
-</div>
-`;
-
-        <p><strong>Name:</strong> ${name}</p>
-
-        <p><strong>Class:</strong> ${studentClass}</p>
-
-        <p><strong>Hobbies:</strong> ${hobbies}</p>
-
-        <p><strong>About Me:</strong> ${bio}</p>
+            <p><strong>About Me:</strong> ${bio}</p>
+        </div>
     `;
 }

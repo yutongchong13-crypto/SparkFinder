@@ -41,7 +41,15 @@ Meet classmates with similar hobbies and interests.
 
 <input id="name" placeholder="Full Name">
 
-<input id="studentClass" placeholder="Class (e.g. 1A)">
+<select id="studentClass">
+    <option value="">Select Your Class</option>
+    <option>1A</option>
+    <option>1B</option>
+    <option>1C</option>
+    <option>1D</option>
+    <option>1E</option>
+    <option>1F</option>
+</select>
 
 <input id="hobbies" placeholder="Hobbies">
 
@@ -59,8 +67,9 @@ Create Profile
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
 <script src="script.js"></script>
 
 </body>
-
 </html>

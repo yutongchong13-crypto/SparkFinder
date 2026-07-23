@@ -2,74 +2,87 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>SparkFinder</title>
+    <title>SparkFinder</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<nav>
-    <h1>✨ SparkFinder</h1>
+    <nav>
+        <h1>✨ SparkFinder</h1>
 
-    <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#">Friends</a>
-        <a href="#">CCAs</a>
-        <a href="#">Chat</a>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Friends</a>
+            <a href="#">CCAs</a>
+            <a href="#">Chat</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+
+        <h2>Find Your Spark ✨</h2>
+
+        <p>
+            Meet classmates with similar hobbies and interests.
+        </p>
+
+    </section>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Create Your Profile</h2>
+
+            <input id="name" placeholder="Full Name">
+
+            <select id="studentClass">
+                <option value="">Select Your Class</option>
+                <option>1A</option>
+                <option>1B</option>
+                <option>1C</option>
+                <option>1D</option>
+                <option>1E</option>
+                <option>1F</option>
+            </select>
+
+            <input id="hobbies" placeholder="Hobbies (e.g. Football, Gaming)">
+
+            <input id="interests" placeholder="Interests (e.g. Coding, Music)">
+
+            <textarea id="bio" placeholder="Tell everyone about yourself"></textarea>
+
+            <button onclick="createProfile()">
+                Create Profile
+            </button>
+
+            <br><br>
+
+            <button onclick="findMatches()">
+                ❤️ Find My Matches
+            </button>
+
+        </div>
+
+        <!-- Matches will appear here -->
+        <div id="matches"></div>
+
+        <hr>
+
+        <!-- All profiles will appear here -->
+        <div id="profile"></div>
+
     </div>
-</nav>
 
-<section class="hero">
-
-<h2>Find Your Spark ✨</h2>
-
-<p>
-Meet classmates with similar hobbies and interests.
-</p>
-
-</section>
-
-<div class="container">
-
-<div class="card">
-
-<h2>Create Your Profile</h2>
-
-<input id="name" placeholder="Full Name">
-
-<select id="studentClass">
-    <option value="">Select Your Class</option>
-    <option>1A</option>
-    <option>1B</option>
-    <option>1C</option>
-    <option>1D</option>
-    <option>1E</option>
-    <option>1F</option>
-</select>
-
-<input id="hobbies" placeholder="Hobbies">
-
-<input id="interests" placeholder="Interests">
-
-<textarea id="bio" placeholder="Tell everyone about yourself"></textarea>
-
-<button onclick="createProfile()">
-Create Profile
-</button>
-
-</div>
-
-<div id="profile"></div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="script.js"></script>
 
 </body>
+
 </html>

@@ -1,6 +1,4 @@
-alert("SparkFinder version 2 loaded!");
-
-// Store profiles locally (temporary)
+// Store profiles locally
 let profiles = [];
 
 // Create a profile and save it to Supabase
@@ -12,14 +10,14 @@ async function createProfile() {
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
-    // Check that the user entered a name
+    // Check required field
     if (name.trim() === "") {
         alert("Please enter your name!");
         return;
     }
 
-    // Save the profile to Supabase
-    const { error } = await supabase
+    // Save to Supabase
+    const { error } = await db
         .from("students")
         .insert([
             {
@@ -31,17 +29,15 @@ async function createProfile() {
             }
         ]);
 
-    // If there is an error, show it
     if (error) {
+        alert("❌ " + error.message);
         console.error(error);
-        alert("❌ Error saving profile:\n" + error.message);
         return;
     }
 
-    // Success!
-    alert("✅ Profile saved successfully!");
+    alert("✅ Profile created!");
 
-    // Also display the profile on the page
+    // Add to page
     profiles.push({
         name,
         studentClass,
@@ -52,7 +48,7 @@ async function createProfile() {
 
     displayProfiles();
 
-    // Clear the form
+    // Clear form
     document.getElementById("name").value = "";
     document.getElementById("studentClass").value = "";
     document.getElementById("hobbies").value = "";
@@ -60,7 +56,7 @@ async function createProfile() {
     document.getElementById("bio").value = "";
 }
 
-// Display all profiles
+// Display profiles
 function displayProfiles() {
 
     let html = "";
@@ -78,9 +74,12 @@ function displayProfiles() {
             <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
 
             <p>${profile.bio}</p>
+
         </div>
         `;
+
     });
 
     document.getElementById("profile").innerHTML = html;
+
 }

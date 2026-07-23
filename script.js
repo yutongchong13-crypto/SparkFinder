@@ -1,3 +1,5 @@
+alert("SparkFinder version 2 loaded!");
+
 // Store profiles locally (temporary)
 let profiles = [];
 

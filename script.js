@@ -102,6 +102,10 @@ async function loadProfiles() {
                 ➕ Add Friend
             </button>
 
+            <button onclick="deleteProfile(${profile.id})">
+                🗑️ Delete Profile
+            </button>
+
         </div>
         `;
 
@@ -232,5 +236,35 @@ async function sendFriendRequest(receiver) {
     }
 
     alert("🎉 Friend request sent to " + receiver + "!");
+
+}
+
+// =========================
+// Delete Profile
+// =========================
+
+async function deleteProfile(id) {
+
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this profile?"
+    );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    const { error } = await db
+        .from("students")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("❌ " + error.message);
+        return;
+    }
+
+    alert("🗑️ Profile deleted!");
+
+    loadProfiles();
 
 }

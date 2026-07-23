@@ -3,7 +3,7 @@ window.onload = function () {
     loadProfiles();
 };
 
-// Create a new profile
+// Create a profile
 async function createProfile() {
 
     const name = document.getElementById("name").value;
@@ -12,7 +12,6 @@ async function createProfile() {
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
-    // Check if name is empty
     if (name.trim() === "") {
         alert("Please enter your name!");
         return;
@@ -20,7 +19,6 @@ async function createProfile() {
 
     try {
 
-        // Save profile to Supabase
         const { error } = await db
             .from("students")
             .insert([
@@ -34,12 +32,11 @@ async function createProfile() {
             ]);
 
         if (error) {
-            alert("❌ Supabase Error:\n" + error.message);
-            console.error(error);
+            alert("❌ " + error.message);
             return;
         }
 
-        alert("✅ Profile created successfully!");
+        alert("✅ Profile created!");
 
         // Clear the form
         document.getElementById("name").value = "";
@@ -48,59 +45,135 @@ async function createProfile() {
         document.getElementById("interests").value = "";
         document.getElementById("bio").value = "";
 
-        // Reload all profiles
         loadProfiles();
 
     } catch (err) {
 
-        alert("❌ Network Error:\n" + err.message);
-        console.error(err);
+        alert("❌ Network Error\n" + err.message);
 
     }
+
 }
 
-// Load every profile from Supabase
+// Load every profile
 async function loadProfiles() {
 
-    try {
+    const { data, error } = await db
+        .from("students")
+        .select("*")
+        .order("id", { ascending: false });
 
-        const { data, error } = await db
-            .from("students")
-            .select("*")
-            .order("id", { ascending: false });
+    if (error) {
+        console.log(error);
+        return;
+    }
 
-        if (error) {
-            console.error(error);
-            return;
-        }
+    let html = "";
 
-        let html = "";
+    data.forEach(profile => {
 
-        data.forEach(profile => {
+        html += `
+        <div class="profile-card">
 
-            html += `
-                <div class="profile-card">
+            <h2>👤 ${profile.name}</h2>
 
-                    <h2>👤 ${profile.name}</h2>
+            <p><strong>🏫 Class:</strong> ${profile.class}</p>
 
-                    <p><strong>🏫 Class:</strong> ${profile.class}</p>
+            <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
 
-                    <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
+            <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
 
-                    <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
+            <p>${profile.bio}</p>
 
-                    <p>${profile.bio}</p>
+        </div>
+        `;
 
-                </div>
-            `;
+    });
 
+    document.getElementById("profile").innerHTML = html;
+
+}
+
+// =========================
+// Friend Matching
+// =========================
+
+async function findMatches() {
+
+    const hobbies = document.getElementById("hobbies").value
+        .toLowerCase()
+        .split(",");
+
+    const interests = document.getElementById("interests").value
+        .toLowerCase()
+        .split(",");
+
+    const { data, error } = await db
+        .from("students")
+        .select("*");
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    let html = "<h2>❤️ Your Matches</h2>";
+
+    let foundMatch = false;
+
+    data.forEach(profile => {
+
+        const profileHobbies = (profile.hobbies || "").toLowerCase();
+        const profileInterests = (profile.interests || "").toLowerCase();
+
+        let matched = false;
+
+        hobbies.forEach(hobby => {
+            if (
+                hobby.trim() !== "" &&
+                profileHobbies.includes(hobby.trim())
+            ) {
+                matched = true;
+            }
         });
 
-        document.getElementById("profile").innerHTML = html;
+        interests.forEach(interest => {
+            if (
+                interest.trim() !== "" &&
+                profileInterests.includes(interest.trim())
+            ) {
+                matched = true;
+            }
+        });
 
-    } catch (err) {
+        if (matched) {
 
-        console.error(err);
+            foundMatch = true;
 
+            html += `
+            <div class="profile-card">
+
+                <h2>❤️ ${profile.name}</h2>
+
+                <p><strong>🏫 Class:</strong> ${profile.class}</p>
+
+                <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
+
+                <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
+
+                <p>${profile.bio}</p>
+
+            </div>
+            `;
+
+        }
+
+    });
+
+    if (!foundMatch) {
+        html += "<p>No matching friends found yet.</p>";
     }
+
+    document.getElementById("matches").innerHTML = html;
+
 }

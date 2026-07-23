@@ -1,9 +1,9 @@
-// Load profiles when the page opens
+// Load all profiles when the page opens
 window.onload = function () {
     loadProfiles();
 };
 
-// Create a profile
+// Create a new profile
 async function createProfile() {
 
     const name = document.getElementById("name").value;
@@ -12,73 +12,95 @@ async function createProfile() {
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
+    // Check if name is empty
     if (name.trim() === "") {
         alert("Please enter your name!");
         return;
     }
 
-    const { error } = await db
-        .from("students")
-        .insert([
-            {
-                name,
-                class: studentClass,
-                hobbies,
-                interests,
-                bio
-            }
-        ]);
+    try {
 
-    if (error) {
-        alert(error.message);
-        return;
+        // Save profile to Supabase
+        const { error } = await db
+            .from("students")
+            .insert([
+                {
+                    name: name,
+                    class: studentClass,
+                    hobbies: hobbies,
+                    interests: interests,
+                    bio: bio
+                }
+            ]);
+
+        if (error) {
+            alert("❌ Supabase Error:\n" + error.message);
+            console.error(error);
+            return;
+        }
+
+        alert("✅ Profile created successfully!");
+
+        // Clear the form
+        document.getElementById("name").value = "";
+        document.getElementById("studentClass").value = "";
+        document.getElementById("hobbies").value = "";
+        document.getElementById("interests").value = "";
+        document.getElementById("bio").value = "";
+
+        // Reload all profiles
+        loadProfiles();
+
+    } catch (err) {
+
+        alert("❌ Network Error:\n" + err.message);
+        console.error(err);
+
     }
-
-    alert("✅ Profile created!");
-
-    // Clear form
-    document.getElementById("name").value = "";
-    document.getElementById("studentClass").value = "";
-    document.getElementById("hobbies").value = "";
-    document.getElementById("interests").value = "";
-    document.getElementById("bio").value = "";
-
-    // Reload all profiles
-    loadProfiles();
 }
 
-// Load all profiles from Supabase
+// Load every profile from Supabase
 async function loadProfiles() {
 
-    const { data, error } = await db
-        .from("students")
-        .select("*");
+    try {
 
-    if (error) {
-        console.log(error);
-        return;
+        const { data, error } = await db
+            .from("students")
+            .select("*")
+            .order("id", { ascending: false });
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        let html = "";
+
+        data.forEach(profile => {
+
+            html += `
+                <div class="profile-card">
+
+                    <h2>👤 ${profile.name}</h2>
+
+                    <p><strong>🏫 Class:</strong> ${profile.class}</p>
+
+                    <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
+
+                    <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
+
+                    <p>${profile.bio}</p>
+
+                </div>
+            `;
+
+        });
+
+        document.getElementById("profile").innerHTML = html;
+
+    } catch (err) {
+
+        console.error(err);
+
     }
-
-    let html = "";
-
-    data.forEach(profile => {
-
-        html += `
-        <div class="profile-card">
-
-            <h2>👤 ${profile.name}</h2>
-
-            <p><strong>🏫 Class:</strong> ${profile.class}</p>
-
-            <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
-
-            <p><strong>🎯 Interests:</strong> ${profile.interests}</p>
-
-            <p>${profile.bio}</p>
-
-        </div>
-        `;
-    });
-
-    document.getElementById("profile").innerHTML = html;
 }

@@ -1,7 +1,9 @@
-// Store profiles locally
-let profiles = [];
+// Load profiles when the page opens
+window.onload = function () {
+    loadProfiles();
+};
 
-// Create a profile and save it to Supabase
+// Create a profile
 async function createProfile() {
 
     const name = document.getElementById("name").value;
@@ -10,43 +12,29 @@ async function createProfile() {
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
-    // Check required field
     if (name.trim() === "") {
         alert("Please enter your name!");
         return;
     }
 
-    // Save to Supabase
     const { error } = await db
         .from("students")
         .insert([
             {
-                name: name,
+                name,
                 class: studentClass,
-                hobbies: hobbies,
-                interests: interests,
-                bio: bio
+                hobbies,
+                interests,
+                bio
             }
         ]);
 
     if (error) {
-        alert("❌ " + error.message);
-        console.error(error);
+        alert(error.message);
         return;
     }
 
     alert("✅ Profile created!");
-
-    // Add to page
-    profiles.push({
-        name,
-        studentClass,
-        hobbies,
-        interests,
-        bio
-    });
-
-    displayProfiles();
 
     // Clear form
     document.getElementById("name").value = "";
@@ -54,20 +42,33 @@ async function createProfile() {
     document.getElementById("hobbies").value = "";
     document.getElementById("interests").value = "";
     document.getElementById("bio").value = "";
+
+    // Reload all profiles
+    loadProfiles();
 }
 
-// Display profiles
-function displayProfiles() {
+// Load all profiles from Supabase
+async function loadProfiles() {
+
+    const { data, error } = await db
+        .from("students")
+        .select("*");
+
+    if (error) {
+        console.log(error);
+        return;
+    }
 
     let html = "";
 
-    profiles.forEach(profile => {
+    data.forEach(profile => {
 
         html += `
         <div class="profile-card">
+
             <h2>👤 ${profile.name}</h2>
 
-            <p><strong>🏫 Class:</strong> ${profile.studentClass}</p>
+            <p><strong>🏫 Class:</strong> ${profile.class}</p>
 
             <p><strong>🎮 Hobbies:</strong> ${profile.hobbies}</p>
 
@@ -77,9 +78,7 @@ function displayProfiles() {
 
         </div>
         `;
-
     });
 
     document.getElementById("profile").innerHTML = html;
-
 }

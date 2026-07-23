@@ -1,5 +1,5 @@
 // =========================
-// SparkFinder V2
+// SparkFinder
 // =========================
 
 let currentUser = null;
@@ -27,41 +27,33 @@ async function createProfile() {
     }
 
     const profile = {
-        name,
+        name: name,
         class: studentClass,
-        hobbies,
-        interests,
-        bio
+        hobbies: hobbies,
+        interests: interests,
+        bio: bio
     };
 
-    try {
+    const { error } = await db
+        .from("students")
+        .insert([profile]);
 
-        const { error } = await db
-            .from("students")
-            .insert([profile]);
-
-        if (error) {
-            alert("❌ " + error.message);
-            return;
-        }
-
-        currentUser = profile;
-
-        alert("✅ Profile created!");
-
-        document.getElementById("name").value = "";
-        document.getElementById("studentClass").value = "";
-        document.getElementById("hobbies").value = "";
-        document.getElementById("interests").value = "";
-        document.getElementById("bio").value = "";
-
-        loadProfiles();
-
-    } catch (err) {
-
-        alert("❌ " + err.message);
-
+    if (error) {
+        alert(error.message);
+        return;
     }
+
+    currentUser = profile;
+
+    alert("✅ Profile created!");
+
+    document.getElementById("name").value = "";
+    document.getElementById("studentClass").value = "";
+    document.getElementById("hobbies").value = "";
+    document.getElementById("interests").value = "";
+    document.getElementById("bio").value = "";
+
+    loadProfiles();
 
 }
 
@@ -77,7 +69,7 @@ async function loadProfiles() {
         .order("id", { ascending: false });
 
     if (error) {
-        console.log(error);
+        alert(error.message);
         return;
     }
 
@@ -116,7 +108,7 @@ async function loadProfiles() {
 }
 
 // =========================
-// Friend Matching
+// Find Matches
 // =========================
 
 async function findMatches() {
@@ -150,9 +142,12 @@ async function findMatches() {
 
         myHobbies.forEach(hobby => {
 
+            hobby = hobby.trim();
+
             if (
-                hobby.trim() !== "" &&
-                (profile.hobbies || "").toLowerCase().includes(hobby.trim())
+                hobby !== "" &&
+                profile.hobbies &&
+                profile.hobbies.toLowerCase().includes(hobby)
             ) {
                 score += 25;
             }
@@ -161,9 +156,12 @@ async function findMatches() {
 
         myInterests.forEach(interest => {
 
+            interest = interest.trim();
+
             if (
-                interest.trim() !== "" &&
-                (profile.interests || "").toLowerCase().includes(interest.trim())
+                interest !== "" &&
+                profile.interests &&
+                profile.interests.toLowerCase().includes(interest)
             ) {
                 score += 25;
             }
@@ -205,7 +203,7 @@ async function findMatches() {
 }
 
 // =========================
-// Friend Requests
+// Friend Request
 // =========================
 
 async function sendFriendRequest(receiver) {
@@ -235,7 +233,7 @@ async function sendFriendRequest(receiver) {
         return;
     }
 
-    alert("🎉 Friend request sent to " + receiver + "!");
+    alert("🎉 Friend request sent!");
 
 }
 
@@ -249,9 +247,7 @@ async function deleteProfile(id) {
         "Are you sure you want to delete this profile?"
     );
 
-    if (!confirmDelete) {
-        return;
-    }
+    if (!confirmDelete) return;
 
     const { error } = await db
         .from("students")
@@ -259,7 +255,7 @@ async function deleteProfile(id) {
         .eq("id", id);
 
     if (error) {
-        alert("❌ " + error.message);
+        alert(error.message);
         return;
     }
 

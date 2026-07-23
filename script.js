@@ -36,7 +36,7 @@ async function createProfile() {
 
     alert("✅ Profile saved!");
 
-    // Also display it on this page
+    // Save locally too
     profiles.push({
         name,
         studentClass,
@@ -55,7 +55,7 @@ async function createProfile() {
     document.getElementById("bio").value = "";
 }
 
-// Display profiles on the page
+// Display profiles
 function displayProfiles() {
 
     let html = "";

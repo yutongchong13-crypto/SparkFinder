@@ -1,13 +1,91 @@
 // =========================
-// SparkFinder
+// SparkFinder V3 - Part 1
 // =========================
 
 let currentUser = null;
 
-// Load profiles when the page opens
-window.onload = function () {
-    loadProfiles();
+// =========================
+// When page loads
+// =========================
+
+window.onload = async function () {
+
+    await loadProfiles();
+    await loadUsers();
+
 };
+
+// =========================
+// Load users into Login box
+// =========================
+
+async function loadUsers() {
+
+    const { data, error } = await db
+        .from("students")
+        .select("name")
+        .order("name");
+
+    if (error) {
+        console.log(error);
+        return;
+    }
+
+    const select = document.getElementById("loginUser");
+
+    if (!select) return;
+
+    select.innerHTML =
+        `<option value="">Select Your Profile</option>`;
+
+    data.forEach(user => {
+
+        select.innerHTML += `
+            <option value="${user.name}">
+                ${user.name}
+            </option>
+        `;
+
+    });
+
+}
+
+// =========================
+// Login
+// =========================
+
+async function login() {
+
+    const selectedName =
+        document.getElementById("loginUser").value;
+
+    if (selectedName === "") {
+
+        alert("Please select your profile.");
+
+        return;
+
+    }
+
+    const { data, error } = await db
+        .from("students")
+        .select("*")
+        .eq("name", selectedName)
+        .single();
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+
+    }
+
+    currentUser = data;
+
+    alert("✅ Logged in as " + currentUser.name);
+
+}
 
 // =========================
 // Create Profile
@@ -15,23 +93,37 @@ window.onload = function () {
 
 async function createProfile() {
 
-    const name = document.getElementById("name").value.trim();
-    const studentClass = document.getElementById("studentClass").value;
-    const hobbies = document.getElementById("hobbies").value.trim();
-    const interests = document.getElementById("interests").value.trim();
-    const bio = document.getElementById("bio").value.trim();
+    const name =
+        document.getElementById("name").value.trim();
+
+    const studentClass =
+        document.getElementById("studentClass").value;
+
+    const hobbies =
+        document.getElementById("hobbies").value.trim();
+
+    const interests =
+        document.getElementById("interests").value.trim();
+
+    const bio =
+        document.getElementById("bio").value.trim();
 
     if (name === "") {
-        alert("Please enter your name!");
+
+        alert("Please enter your name.");
+
         return;
+
     }
 
     const profile = {
+
         name: name,
         class: studentClass,
         hobbies: hobbies,
         interests: interests,
         bio: bio
+
     };
 
     const { error } = await db
@@ -39,8 +131,11 @@ async function createProfile() {
         .insert([profile]);
 
     if (error) {
+
         alert(error.message);
+
         return;
+
     }
 
     currentUser = profile;
@@ -53,7 +148,8 @@ async function createProfile() {
     document.getElementById("interests").value = "";
     document.getElementById("bio").value = "";
 
-    loadProfiles();
+    await loadProfiles();
+    await loadUsers();
 
 }
 
@@ -69,8 +165,11 @@ async function loadProfiles() {
         .order("id", { ascending: false });
 
     if (error) {
+
         alert(error.message);
+
         return;
+
     }
 
     let html = "";
@@ -78,6 +177,7 @@ async function loadProfiles() {
     data.forEach(profile => {
 
         html += `
+
         <div class="profile-card">
 
             <h2>👤 ${profile.name}</h2>
@@ -99,6 +199,7 @@ async function loadProfiles() {
             </button>
 
         </div>
+
         `;
 
     });
@@ -106,20 +207,24 @@ async function loadProfiles() {
     document.getElementById("profile").innerHTML = html;
 
 }
-
 // =========================
-// Find Matches
+// Friend Matching
 // =========================
 
 async function findMatches() {
 
     if (!currentUser) {
-        alert("Please create your profile first.");
+        alert("Please log in first.");
         return;
     }
 
-    const myHobbies = currentUser.hobbies.toLowerCase().split(",");
-    const myInterests = currentUser.interests.toLowerCase().split(",");
+    const myHobbies = (currentUser.hobbies || "")
+        .toLowerCase()
+        .split(",");
+
+    const myInterests = (currentUser.interests || "")
+        .toLowerCase()
+        .split(",");
 
     const { data, error } = await db
         .from("students")
@@ -146,8 +251,9 @@ async function findMatches() {
 
             if (
                 hobby !== "" &&
-                profile.hobbies &&
-                profile.hobbies.toLowerCase().includes(hobby)
+                (profile.hobbies || "")
+                    .toLowerCase()
+                    .includes(hobby)
             ) {
                 score += 25;
             }
@@ -160,8 +266,9 @@ async function findMatches() {
 
             if (
                 interest !== "" &&
-                profile.interests &&
-                profile.interests.toLowerCase().includes(interest)
+                (profile.interests || "")
+                    .toLowerCase()
+                    .includes(interest)
             ) {
                 score += 25;
             }
@@ -173,6 +280,7 @@ async function findMatches() {
             found = true;
 
             html += `
+
             <div class="profile-card">
 
                 <h2>❤️ ${profile.name}</h2>
@@ -187,7 +295,12 @@ async function findMatches() {
 
                 <p>${profile.bio}</p>
 
+                <button onclick="sendFriendRequest('${profile.name}')">
+                    ➕ Add Friend
+                </button>
+
             </div>
+
             `;
 
         }
@@ -203,18 +316,29 @@ async function findMatches() {
 }
 
 // =========================
-// Friend Request
+// Send Friend Request
 // =========================
 
 async function sendFriendRequest(receiver) {
 
     if (!currentUser) {
-        alert("Please create your profile first.");
+        alert("Please log in first.");
         return;
     }
 
     if (receiver === currentUser.name) {
-        alert("You can't send a friend request to yourself!");
+        alert("You can't add yourself!");
+        return;
+    }
+
+    const { data: existing } = await db
+        .from("friend_requests")
+        .select("*")
+        .eq("sender", currentUser.name)
+        .eq("receiver", receiver);
+
+    if (existing && existing.length > 0) {
+        alert("You have already sent a friend request.");
         return;
     }
 
@@ -233,7 +357,7 @@ async function sendFriendRequest(receiver) {
         return;
     }
 
-    alert("🎉 Friend request sent!");
+    alert("🎉 Friend request sent to " + receiver + "!");
 
 }
 
@@ -243,11 +367,9 @@ async function sendFriendRequest(receiver) {
 
 async function deleteProfile(id) {
 
-    const confirmDelete = confirm(
-        "Are you sure you want to delete this profile?"
-    );
-
-    if (!confirmDelete) return;
+    if (!confirm("Delete this profile?")) {
+        return;
+    }
 
     const { error } = await db
         .from("students")
@@ -261,6 +383,48 @@ async function deleteProfile(id) {
 
     alert("🗑️ Profile deleted!");
 
-    loadProfiles();
+    if (currentUser && currentUser.id === id) {
+        currentUser = null;
+    }
+
+    await loadProfiles();
+    await loadUsers();
+
+}
+
+// =========================
+// View Friend Requests
+// =========================
+
+async function viewFriendRequests() {
+
+    if (!currentUser) {
+        alert("Please log in first.");
+        return;
+    }
+
+    const { data, error } = await db
+        .from("friend_requests")
+        .select("*")
+        .eq("receiver", currentUser.name)
+        .eq("status", "pending");
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    if (data.length === 0) {
+        alert("No pending friend requests.");
+        return;
+    }
+
+    let message = "Pending Friend Requests:\n\n";
+
+    data.forEach(request => {
+        message += "• " + request.sender + "\n";
+    });
+
+    alert(message);
 
 }

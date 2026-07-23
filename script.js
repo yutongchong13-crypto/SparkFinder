@@ -206,12 +206,16 @@ async function loadProfiles() {
             <p>${profile.bio}</p>
 
             <button onclick="sendFriendRequest('${profile.name}')">
-                ➕ Add Friend
-            </button>
+    ➕ Add Friend
+</button>
 
-            <button onclick="deleteProfile(${profile.id})">
-                🗑️ Delete Profile
-            </button>
+<button onclick="editProfile(${profile.id})">
+    ✏️ Edit Profile
+</button>
+
+<button onclick="deleteProfile(${profile.id})">
+    🗑️ Delete Profile
+</button>
 
         </div>
 

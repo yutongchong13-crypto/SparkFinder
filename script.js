@@ -1,40 +1,51 @@
-// Load all profiles when the page opens
+// =========================
+// SparkFinder V2
+// =========================
+
+let currentUser = null;
+
+// Load profiles when the page opens
 window.onload = function () {
     loadProfiles();
 };
 
-// Create a profile
+// =========================
+// Create Profile
+// =========================
+
 async function createProfile() {
 
-    const name = document.getElementById("name").value;
+    const name = document.getElementById("name").value.trim();
     const studentClass = document.getElementById("studentClass").value;
-    const hobbies = document.getElementById("hobbies").value;
-    const interests = document.getElementById("interests").value;
-    const bio = document.getElementById("bio").value;
+    const hobbies = document.getElementById("hobbies").value.trim();
+    const interests = document.getElementById("interests").value.trim();
+    const bio = document.getElementById("bio").value.trim();
 
-    if (name.trim() === "") {
+    if (name === "") {
         alert("Please enter your name!");
         return;
     }
+
+    const profile = {
+        name,
+        class: studentClass,
+        hobbies,
+        interests,
+        bio
+    };
 
     try {
 
         const { error } = await db
             .from("students")
-            .insert([
-                {
-                    name: name,
-                    class: studentClass,
-                    hobbies: hobbies,
-                    interests: interests,
-                    bio: bio
-                }
-            ]);
+            .insert([profile]);
 
         if (error) {
             alert("❌ " + error.message);
             return;
         }
+
+        currentUser = profile;
 
         alert("✅ Profile created!");
 
@@ -48,13 +59,16 @@ async function createProfile() {
 
     } catch (err) {
 
-        alert("❌ Network Error\n" + err.message);
+        alert("❌ " + err.message);
 
     }
 
 }
 
-// Load every profile
+// =========================
+// Load Profiles
+// =========================
+
 async function loadProfiles() {
 
     const { data, error } = await db
@@ -97,16 +111,19 @@ async function loadProfiles() {
 
 }
 
+// =========================
 // Friend Matching
+// =========================
+
 async function findMatches() {
 
-    const hobbies = document.getElementById("hobbies").value
-        .toLowerCase()
-        .split(",");
+    if (!currentUser) {
+        alert("Please create your profile first.");
+        return;
+    }
 
-    const interests = document.getElementById("interests").value
-        .toLowerCase()
-        .split(",");
+    const myHobbies = currentUser.hobbies.toLowerCase().split(",");
+    const myInterests = currentUser.interests.toLowerCase().split(",");
 
     const { data, error } = await db
         .from("students")
@@ -119,41 +136,46 @@ async function findMatches() {
 
     let html = "<h2>❤️ Your Matches</h2>";
 
-    let foundMatch = false;
+    let found = false;
 
     data.forEach(profile => {
 
-        const profileHobbies = (profile.hobbies || "").toLowerCase();
-        const profileInterests = (profile.interests || "").toLowerCase();
+        if (profile.name === currentUser.name) return;
 
-        let matched = false;
+        let score = 0;
 
-        hobbies.forEach(hobby => {
+        myHobbies.forEach(hobby => {
+
             if (
                 hobby.trim() !== "" &&
-                profileHobbies.includes(hobby.trim())
+                (profile.hobbies || "").toLowerCase().includes(hobby.trim())
             ) {
-                matched = true;
+                score += 25;
             }
+
         });
 
-        interests.forEach(interest => {
+        myInterests.forEach(interest => {
+
             if (
                 interest.trim() !== "" &&
-                profileInterests.includes(interest.trim())
+                (profile.interests || "").toLowerCase().includes(interest.trim())
             ) {
-                matched = true;
+                score += 25;
             }
+
         });
 
-        if (matched) {
+        if (score > 0) {
 
-            foundMatch = true;
+            found = true;
 
             html += `
             <div class="profile-card">
 
                 <h2>❤️ ${profile.name}</h2>
+
+                <h3>${score}% Match</h3>
 
                 <p><strong>🏫 Class:</strong> ${profile.class}</p>
 
@@ -163,10 +185,6 @@ async function findMatches() {
 
                 <p>${profile.bio}</p>
 
-                <button onclick="sendFriendRequest('${profile.name}')">
-                    ➕ Add Friend
-                </button>
-
             </div>
             `;
 
@@ -174,26 +192,35 @@ async function findMatches() {
 
     });
 
-    if (!foundMatch) {
-        html += "<p>No matching friends found yet.</p>";
+    if (!found) {
+        html += "<p>No matching friends found.</p>";
     }
 
     document.getElementById("matches").innerHTML = html;
 
 }
 
-// Send Friend Request
+// =========================
+// Friend Requests
+// =========================
+
 async function sendFriendRequest(receiver) {
 
-    const sender = prompt("Enter your name:");
+    if (!currentUser) {
+        alert("Please create your profile first.");
+        return;
+    }
 
-    if (!sender) return;
+    if (receiver === currentUser.name) {
+        alert("You can't send a friend request to yourself!");
+        return;
+    }
 
     const { error } = await db
         .from("friend_requests")
         .insert([
             {
-                sender: sender,
+                sender: currentUser.name,
                 receiver: receiver,
                 status: "pending"
             }

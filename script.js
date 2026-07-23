@@ -1,7 +1,8 @@
-// Store all profiles
+// Store profiles locally (temporary)
 let profiles = [];
 
-function createProfile() {
+// Create a profile and save it to Supabase
+async function createProfile() {
 
     const name = document.getElementById("name").value;
     const studentClass = document.getElementById("studentClass").value;
@@ -9,12 +10,33 @@ function createProfile() {
     const interests = document.getElementById("interests").value;
     const bio = document.getElementById("bio").value;
 
-    if(name.trim()==""){
+    if (name.trim() === "") {
         alert("Please enter your name!");
         return;
     }
 
-    // Add profile to the list
+    // Save to Supabase
+    const { error } = await supabase
+        .from("students")
+        .insert([
+            {
+                name: name,
+                class: studentClass,
+                hobbies: hobbies,
+                interests: interests,
+                bio: bio
+            }
+        ]);
+
+    if (error) {
+        console.error(error);
+        alert("❌ Error saving profile:\n" + error.message);
+        return;
+    }
+
+    alert("✅ Profile saved!");
+
+    // Also display it on this page
     profiles.push({
         name,
         studentClass,
@@ -26,20 +48,21 @@ function createProfile() {
     displayProfiles();
 
     // Clear the form
-    document.getElementById("name").value="";
-    document.getElementById("studentClass").value="";
-    document.getElementById("hobbies").value="";
-    document.getElementById("interests").value="";
-    document.getElementById("bio").value="";
+    document.getElementById("name").value = "";
+    document.getElementById("studentClass").value = "";
+    document.getElementById("hobbies").value = "";
+    document.getElementById("interests").value = "";
+    document.getElementById("bio").value = "";
 }
 
-function displayProfiles(){
+// Display profiles on the page
+function displayProfiles() {
 
-    let html="";
+    let html = "";
 
-    profiles.forEach(profile=>{
+    profiles.forEach(profile => {
 
-        html+=`
+        html += `
         <div class="profile-card">
 
             <h2>👤 ${profile.name}</h2>
@@ -56,6 +79,5 @@ function displayProfiles(){
         `;
     });
 
-    document.getElementById("profile").innerHTML=html;
-
+    document.getElementById("profile").innerHTML = html;
 }

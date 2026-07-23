@@ -447,3 +447,60 @@ async function viewFriendRequests() {
     alert(message);
 
 }
+// =========================
+// Edit Profile
+// =========================
+
+async function editProfile(id) {
+
+    const { data, error } = await db
+        .from("students")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    const newHobbies = prompt(
+        "Enter your new hobbies:",
+        data.hobbies
+    );
+
+    if (newHobbies === null) return;
+
+    const newInterests = prompt(
+        "Enter your new interests:",
+        data.interests
+    );
+
+    if (newInterests === null) return;
+
+    const newBio = prompt(
+        "Enter your new bio:",
+        data.bio
+    );
+
+    if (newBio === null) return;
+
+    const { error: updateError } = await db
+        .from("students")
+        .update({
+            hobbies: newHobbies,
+            interests: newInterests,
+            bio: newBio
+        })
+        .eq("id", id);
+
+    if (updateError) {
+        alert(updateError.message);
+        return;
+    }
+
+    alert("✅ Profile updated!");
+
+    loadProfiles();
+
+}

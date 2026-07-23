@@ -115,6 +115,21 @@ async function createProfile() {
         return;
 
     }
+    // Check if this name already exists
+const { data: existingUser, error: checkError } = await db
+    .from("students")
+    .select("*")
+    .eq("name", name);
+
+if (checkError) {
+    alert(checkError.message);
+    return;
+}
+
+if (existingUser.length > 0) {
+    alert("❌ A profile with this name already exists.\n\nPlease log in instead.");
+    return;
+}
 
     const profile = {
 

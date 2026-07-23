@@ -38,7 +38,6 @@ async function createProfile() {
 
         alert("✅ Profile created!");
 
-        // Clear the form
         document.getElementById("name").value = "";
         document.getElementById("studentClass").value = "";
         document.getElementById("hobbies").value = "";
@@ -85,6 +84,10 @@ async function loadProfiles() {
 
             <p>${profile.bio}</p>
 
+            <button onclick="sendFriendRequest('${profile.name}')">
+                ➕ Add Friend
+            </button>
+
         </div>
         `;
 
@@ -94,10 +97,7 @@ async function loadProfiles() {
 
 }
 
-// =========================
 // Friend Matching
-// =========================
-
 async function findMatches() {
 
     const hobbies = document.getElementById("hobbies").value
@@ -163,6 +163,10 @@ async function findMatches() {
 
                 <p>${profile.bio}</p>
 
+                <button onclick="sendFriendRequest('${profile.name}')">
+                    ➕ Add Friend
+                </button>
+
             </div>
             `;
 
@@ -175,5 +179,31 @@ async function findMatches() {
     }
 
     document.getElementById("matches").innerHTML = html;
+
+}
+
+// Send Friend Request
+async function sendFriendRequest(receiver) {
+
+    const sender = prompt("Enter your name:");
+
+    if (!sender) return;
+
+    const { error } = await db
+        .from("friend_requests")
+        .insert([
+            {
+                sender: sender,
+                receiver: receiver,
+                status: "pending"
+            }
+        ]);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("🎉 Friend request sent to " + receiver + "!");
 
 }

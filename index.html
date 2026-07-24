@@ -2,53 +2,34 @@
 <html lang="en">
 
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SparkFinder</title>
-
-<link rel="stylesheet" href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SparkFinder</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <nav>
-
     <h1>✨ SparkFinder</h1>
 
     <div class="nav-links">
         <a href="#">Home</a>
         <a href="#">Friends</a>
-        <a href="#">CCAs</a>
         <a href="#">Chat</a>
     </div>
-
 </nav>
-
-<section class="hero">
-
-    <h2>Find Your Spark ✨</h2>
-
-    <p>
-        Meet classmates with similar hobbies and interests.
-    </p>
-
-</section>
 
 <div class="container">
 
-    <!-- Login Card -->
+    <!-- Login -->
 
     <div class="card">
 
         <h2>Login</h2>
 
         <select id="loginUser">
-
             <option value="">Select Your Profile</option>
-
         </select>
 
         <button onclick="login()">
@@ -57,17 +38,20 @@
 
     </div>
 
-    <!-- Create Profile Card -->
+    <!-- Create Profile -->
 
     <div class="card">
 
-        <h2>Create Your Profile</h2>
+        <h2>Create Profile</h2>
 
-        <input id="name" placeholder="Full Name">
+        <input
+            id="name"
+            placeholder="Full Name">
 
         <select id="studentClass">
 
-            <option value="">Select Your Class</option>
+            <option value="">Select Class</option>
+
             <option>1A</option>
             <option>1B</option>
             <option>1C</option>
@@ -77,38 +61,41 @@
 
         </select>
 
-        <input id="hobbies" placeholder="Hobbies (e.g. Football, Gaming)">
+        <input
+            id="hobbies"
+            placeholder="Hobbies">
 
-        <input id="interests" placeholder="Interests (e.g. Coding, Music)">
+        <input
+            id="interests"
+            placeholder="Interests">
 
-        <textarea id="bio" placeholder="Tell everyone about yourself"></textarea>
+        <textarea
+            id="bio"
+            placeholder="Tell us about yourself"></textarea>
 
         <button onclick="createProfile()">
             Create Profile
         </button>
 
         <button onclick="findMatches()">
-            ❤️ Find My Matches
+            ❤️ Find Matches
+        </button>
+
+        <button onclick="viewFriendRequests()">
+            📩 Friend Requests
         </button>
 
     </div>
 
-    <!-- Matches -->
-
     <div id="matches"></div>
-
-    <!-- Profiles -->
 
     <div id="profile"></div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
-
 <script src="script.js"></script>
 
 </body>
-
 </html>

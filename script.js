@@ -531,3 +531,51 @@ async function editProfile(id) {
     loadProfiles();
 
 }
+// =========================
+// Accept Friend Request
+// =========================
+
+async function acceptRequest(id) {
+
+    const { error } = await db
+        .from("friend_requests")
+        .update({
+            status: "accepted"
+        })
+        .eq("id", id);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("🎉 Friend request accepted!");
+
+    viewFriendRequests();
+
+}
+
+
+// =========================
+// Decline Friend Request
+// =========================
+
+async function declineRequest(id) {
+
+    const { error } = await db
+        .from("friend_requests")
+        .update({
+            status: "declined"
+        })
+        .eq("id", id);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("Friend request declined.");
+
+    viewFriendRequests();
+
+}

@@ -419,10 +419,7 @@ async function deleteProfile(id) {
 
 async function viewFriendRequests() {
 
-    if (!currentUser) {
-        alert("Please log in first.");
-        return;
-    }
+    if (!currentUser) return;
 
     const { data, error } = await db
         .from("friend_requests")
@@ -435,18 +432,46 @@ async function viewFriendRequests() {
         return;
     }
 
+    let html = `
+        <div class="card">
+            <h2>📩 Friend Requests</h2>
+    `;
+
     if (data.length === 0) {
-        alert("No pending friend requests.");
-        return;
+
+        html += `
+            <p>No pending friend requests.</p>
+        `;
+
+    } else {
+
+        data.forEach(request => {
+
+            html += `
+
+                <div class="profile-card">
+
+                    <h3>${request.sender}</h3>
+
+                    <button onclick="acceptRequest('${request.id}')">
+                        ✅ Accept
+                    </button>
+
+                    <button onclick="declineRequest('${request.id}')">
+                        ❌ Decline
+                    </button>
+
+                </div>
+
+            `;
+
+        });
+
     }
 
-    let message = "Pending Friend Requests:\n\n";
+    html += `</div>`;
 
-    data.forEach(request => {
-        message += "• " + request.sender + "\n";
-    });
-
-    alert(message);
+    document.getElementById("friendRequests").innerHTML = html;
 
 }
 // =========================

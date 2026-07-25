@@ -490,8 +490,10 @@ async function viewFriendRequests() {
 
 }
 // =========================
-// Edit Profile
+// Open Edit Profile
 // =========================
+
+let editingProfileId = null;
 
 async function editProfile(id) {
 
@@ -506,44 +508,15 @@ async function editProfile(id) {
         return;
     }
 
-    const newHobbies = prompt(
-        "Enter your new hobbies:",
-        data.hobbies
-    );
+    editingProfileId = id;
 
-    if (newHobbies === null) return;
+    document.getElementById("editName").value = data.name;
+    document.getElementById("editClass").value = data.class;
+    document.getElementById("editHobbies").value = data.hobbies;
+    document.getElementById("editInterests").value = data.interests;
+    document.getElementById("editBio").value = data.bio;
 
-    const newInterests = prompt(
-        "Enter your new interests:",
-        data.interests
-    );
-
-    if (newInterests === null) return;
-
-    const newBio = prompt(
-        "Enter your new bio:",
-        data.bio
-    );
-
-    if (newBio === null) return;
-
-    const { error: updateError } = await db
-        .from("students")
-        .update({
-            hobbies: newHobbies,
-            interests: newInterests,
-            bio: newBio
-        })
-        .eq("id", id);
-
-    if (updateError) {
-        alert(updateError.message);
-        return;
-    }
-
-    alert("✅ Profile updated!");
-
-    loadProfiles();
+    document.getElementById("editCard").style.display = "block";
 
 }
 // =========================

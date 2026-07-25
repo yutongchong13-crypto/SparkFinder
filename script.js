@@ -83,8 +83,12 @@ async function login() {
 
     currentUser = data;
 
-alert("✅ Logged in as " + currentUser.name);
+alert(
+    "Logged in as: " + currentUser.name +
+    "\nReceiver search: " + currentUser.name
+);
 
+await viewFriendRequests();
 await viewFriendRequests();
 
 }

@@ -78,6 +78,8 @@ async function login() {
 
     alert("✅ Logged in as " + currentUser.name);
 
+    // Reload the page sections now that we know who is logged in
+    await loadProfiles();
     await viewFriendRequests();
     await loadFriends();
 

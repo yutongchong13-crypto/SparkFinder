@@ -56,15 +56,11 @@ async function loadUsers() {
 
 async function login() {
 
-    const selectedName =
-        document.getElementById("loginUser").value;
+    const selectedName = document.getElementById("loginUser").value;
 
     if (selectedName === "") {
-
         alert("Please select your profile.");
-
         return;
-
     }
 
     const { data, error } = await db
@@ -74,25 +70,18 @@ async function login() {
         .single();
 
     if (error) {
-
         alert(error.message);
-
         return;
-
     }
 
     currentUser = data;
 
-alert(
-    "Logged in as: " + currentUser.name +
-    "\nReceiver search: " + currentUser.name
-);
+    alert("✅ Logged in as " + currentUser.name);
 
-await viewFriendRequests();
-await viewFriendRequests();
+    await viewFriendRequests();
+    await loadFriends();
 
 }
-
 // =========================
 // Create Profile
 // =========================

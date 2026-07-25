@@ -386,6 +386,25 @@ async function deleteProfile(id) {
         return;
     }
 
+    // Get the profile name first
+    const { data: profile, error: profileError } = await db
+        .from("students")
+        .select("name")
+        .eq("id", id)
+        .single();
+
+    if (profileError) {
+        alert(profileError.message);
+        return;
+    }
+
+    // Delete all friend requests involving this user
+    await db
+        .from("friend_requests")
+        .delete()
+        .or(`sender.eq.${profile.name},receiver.eq.${profile.name}`);
+
+    // Delete the profile
     const { error } = await db
         .from("students")
         .delete()
@@ -405,6 +424,8 @@ async function deleteProfile(id) {
     await loadProfiles();
     await loadUsers();
 
+    document.getElementById("friends").innerHTML = "";
+    document.getElementById("friendRequests").innerHTML = "";
 }
 
 // =========================

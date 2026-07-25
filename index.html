@@ -93,6 +93,41 @@
 
 <div id="friends"></div>
 
+<!-- Edit Profile Card -->
+
+<div id="editCard" class="card" style="display:none;">
+
+    <h2>✏️ Edit Your Profile</h2>
+
+    <input id="editName" placeholder="Full Name">
+
+    <select id="editClass">
+
+        <option>1A</option>
+        <option>1B</option>
+        <option>1C</option>
+        <option>1D</option>
+        <option>1E</option>
+        <option>1F</option>
+
+    </select>
+
+    <input id="editHobbies" placeholder="Hobbies">
+
+    <input id="editInterests" placeholder="Interests">
+
+    <textarea id="editBio"></textarea>
+
+    <button onclick="saveProfileChanges()">
+        💾 Save Changes
+    </button>
+
+    <button onclick="closeEditProfile()">
+        ❌ Cancel
+    </button>
+
+</div>
+
 <div id="profile"></div>
 </div>
 

@@ -544,7 +544,8 @@ async function acceptRequest(id) {
 
     alert("🎉 Friend request accepted!");
 
-    viewFriendRequests();
+await viewFriendRequests();
+await loadFriends();
 
 }
 
@@ -570,5 +571,64 @@ async function declineRequest(id) {
     alert("Friend request declined.");
 
     viewFriendRequests();
+
+}
+// =========================
+// Load Friends
+// =========================
+
+async function loadFriends() {
+
+    if (!currentUser) return;
+
+    const { data, error } = await db
+        .from("friend_requests")
+        .select("*")
+        .eq("status", "accepted");
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    let html = `
+        <div class="card">
+            <h2>👥 My Friends</h2>
+    `;
+
+    let found = false;
+
+    data.forEach(friend => {
+
+        let friendName = "";
+
+        if (friend.sender === currentUser.name) {
+            friendName = friend.receiver;
+        }
+        else if (friend.receiver === currentUser.name) {
+            friendName = friend.sender;
+        }
+
+        if (friendName !== "") {
+
+            found = true;
+
+            html += `
+                <div class="profile-card">
+                    <h3>❤️ ${friendName}</h3>
+                </div>
+            `;
+
+        }
+
+    });
+
+    if (!found) {
+        html += `<p>You don't have any friends yet.</p>`;
+    }
+
+    html += `</div>`;
+
+    document.getElementById("friends").innerHTML = html;
 
 }

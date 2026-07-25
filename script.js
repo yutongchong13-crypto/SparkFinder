@@ -206,7 +206,6 @@ async function loadProfiles() {
     ➕ Add Friend
 </button>
 
-${currentUser && currentUser.id === profile.id ? `
 <button onclick="editProfile('${profile.id}')">
     ✏️ Edit Profile
 </button>
@@ -214,8 +213,6 @@ ${currentUser && currentUser.id === profile.id ? `
 <button onclick="deleteProfile('${profile.id}')">
     🗑️ Delete Profile
 </button>
-` : ""}
-
         </div>
 
         `;

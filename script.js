@@ -627,3 +627,45 @@ async function loadFriends() {
     document.getElementById("friends").innerHTML = html;
 
 }
+// =========================
+// Save Profile Changes
+// =========================
+
+async function saveProfileChanges() {
+
+    const { error } = await db
+        .from("students")
+        .update({
+
+            name: document.getElementById("editName").value,
+            class: document.getElementById("editClass").value,
+            hobbies: document.getElementById("editHobbies").value,
+            interests: document.getElementById("editInterests").value,
+            bio: document.getElementById("editBio").value
+
+        })
+        .eq("id", editingProfileId);
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("✅ Profile updated!");
+
+    document.getElementById("editCard").style.display = "none";
+
+    await loadProfiles();
+
+}
+
+
+// =========================
+// Close Edit Profile
+// =========================
+
+function closeEditProfile() {
+
+    document.getElementById("editCard").style.display = "none";
+
+}

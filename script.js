@@ -669,3 +669,46 @@ function closeEditProfile() {
     document.getElementById("editCard").style.display = "none";
 
 }
+// =========================
+// Load My Profile
+// =========================
+
+async function loadMyProfile() {
+
+    if (!currentUser) {
+
+        document.getElementById("myProfile").innerHTML = `
+            <div class="card">
+                <h2>Please log in from the Home page first.</h2>
+            </div>
+        `;
+        return;
+    }
+
+    const html = `
+        <div class="profile-card">
+
+            <h2>👤 ${currentUser.name}</h2>
+
+            <p><strong>🏫 Class:</strong> ${currentUser.class}</p>
+
+            <p><strong>🎮 Hobbies:</strong> ${currentUser.hobbies}</p>
+
+            <p><strong>🎯 Interests:</strong> ${currentUser.interests}</p>
+
+            <p>${currentUser.bio}</p>
+
+            <button onclick="editProfile('${currentUser.id}')">
+                ✏️ Edit Profile
+            </button>
+
+            <button onclick="deleteProfile('${currentUser.id}')">
+                🗑️ Delete Profile
+            </button>
+
+        </div>
+    `;
+
+    document.getElementById("myProfile").innerHTML = html;
+
+}

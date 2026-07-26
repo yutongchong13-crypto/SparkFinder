@@ -712,3 +712,6 @@ async function loadMyProfile() {
     document.getElementById("myProfile").innerHTML = html;
 
 }
+if (window.location.pathname.includes("profile.html")) {
+    loadMyProfile();
+}
